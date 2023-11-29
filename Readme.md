@@ -38,36 +38,36 @@ The Sifo SDK is happy with whatever permissions your app uses.
 
 ## Release notes
 
-6.0.0
+6.0.0 2023-11-29
 - Complete Swift refactor of SDK
 - No API changes
 
-5.3.0
+5.3.0 2021-10-27
 - Swift Package Manager Support
 - Removed support for CocoaPods (will probably come back)
 - Added Swift wrapper Library
 - Renamed objc library and removed the exposure of objc code
 
-5.1.1
+5.1.1 2021-04-24
 - Fix memory leak that occurred in some specific scenarios.
 - Add app version info to tags and cookie.
 
-5.1.0
+5.1.0 2021-03-02 
 - SDK skips unnecessary call to server for non-panelists.
 - SDK initializer includes new parameter to specify whether IDFA and IDFV should
   be used for tracking or not.
 
-5.0.4
+5.0.4 2020-12-02
 - SDK not longer uses AppTrackingTransparency framework.
 
-5.0.3
+5.0.3 2020-11-23
 - App start tag sent for apps.
 
-5.0.2
+5.0.2 2020-11-20
 - SDK now asks for tracking permission on iOS 14 for panelists.
 - Added support for multiple webviews.
 
-5.0.1
+5.0.1 2020-11-19
 - Added support for iOS 14.
 - Sifo panelists now sync with IDFA and IDFV.
 - SDK can now detect faulty integration and warn about it.
