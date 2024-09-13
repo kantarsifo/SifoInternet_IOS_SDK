@@ -14,3 +14,11 @@ extension Array where Element == String {
             .joined(separator: .slash)
     }
 }
+
+extension Array where Element == Cookie {
+    
+    func urlEncoded() throws -> String? {
+        let encoded = try JSONEncoder().encode(self)
+        return  String(data: encoded, encoding: .utf8)?.urlEncoded()
+    }
+}

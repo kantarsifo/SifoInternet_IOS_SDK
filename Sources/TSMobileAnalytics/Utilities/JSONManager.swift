@@ -24,21 +24,4 @@ class JSONManager {
 
         return jsonArray
     }
-
-    static func urlEncodedJSON(from data: Data) -> String? {
-        guard let dictionary = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-              JSONSerialization.isValidJSONObject(dictionary),
-              let jsonData = try? JSONSerialization.data(withJSONObject: dictionary),
-              let string = String(data: jsonData, encoding: .utf8)?.urlEncoded()
-        else {
-            TSMobileAnalytics.logger.log(
-                message: "Failed to convert data to JSON.",
-                verbosity: .error)
-
-            return nil
-        }
-
-        return string
-    }
-
 }
