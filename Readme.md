@@ -197,6 +197,432 @@ TSMobileAnalytics.removeWebview(webView)
 If you provided a shared keychain access group.
 Set `Keychain Sharing` to `ON` in the target Capabilities settings
 
+## React Native
+
+This section covers integrating the Sifo SDK into a React Native project. Two setups are described: **bare React Native** (CLI) and **Expo**. All steps are iOS-only.
+
+---
+
+### Bare React Native
+
+**1. Add the package**
+
+Open `ios/MyApp.xcworkspace` in Xcode, go to **File → Add Package Dependencies…**, and enter:
+
+```
+https://github.com/kantarsifo/SifoInternet_IOS_SDK.git
+```
+
+Select the `TSMobileAnalytics` library and add it to your app target.
+
+**2. Configure Info.plist**
+
+Add the query scheme and URL scheme entries (replace `my.bundle.id` with your actual bundle identifier):
+
+```xml
+<key>LSApplicationQueriesSchemes</key>
+<array>
+  <string>se.tns-sifo.internetpanelen</string>
+</array>
+
+<key>CFBundleURLTypes</key>
+<array>
+  <dict>
+    <key>CFBundleTypeRole</key>
+    <string>None</string>
+    <key>CFBundleURLSchemes</key>
+    <array>
+      <string>$(PRODUCT_BUNDLE_IDENTIFIER).tsmobileanalytics</string>
+    </array>
+  </dict>
+</array>
+```
+
+**3. Create the native module**
+
+Create two files to expose the SDK to React Native's JavaScript layer.
+
+`ios/MyApp/SifoModule.swift`:
+
+```swift
+import Foundation
+import TSMobileAnalytics
+
+@objc(SifoModule)
+class SifoModule: NSObject {
+
+  @objc(sendTag:contentID:)
+  func sendTag(categories: [String], contentID: String) {
+    TSMobileAnalytics.sendTag(
+      withCategories: categories,
+      contentID: contentID
+    ) { _, error in
+      if let error = error { print("[Sifo] \(error)") }
+    }
+  }
+
+  @objc static func requiresMainQueueSetup() -> Bool { false }
+}
+```
+
+`ios/MyApp/SifoModule.m` (required to expose the Swift module to React Native):
+
+```objc
+#import <React/RCTBridgeModule.h>
+
+@interface RCT_EXTERN_MODULE(SifoModule, NSObject)
+RCT_EXTERN_METHOD(sendTag:(NSArray *)categories contentID:(NSString *)contentID)
+@end
+```
+
+When Xcode prompts you to create a bridging header after adding the Swift file, click **Yes**. Then add the following to it:
+
+```objc
+#import <React/RCTBridgeModule.h>
+```
+
+> **Note:** If Xcode does not prompt (e.g. your project already has Swift files), create the bridging header manually. Add an empty `.h` file to `ios/MyApp/`, then set its path in **Build Settings → Swift Compiler — General → Objective-C Bridging Header**, and add the import above.
+
+**4. Initialize in AppDelegate**
+
+React Native 0.77 and later — projects use a `RCTReactNativeFactory`-based `AppDelegate`. Update `ios/MyApp/AppDelegate.swift`:
+
+```swift
+import UIKit
+import React
+import React_RCTAppDelegate
+import ReactAppDependencyProvider
+import TSMobileAnalytics
+
+@main
+class AppDelegate: UIResponder, UIApplicationDelegate {
+  var window: UIWindow?
+  var reactNativeDelegate: ReactNativeDelegate?
+  var reactNativeFactory: RCTReactNativeFactory?
+
+  func application(
+    _ application: UIApplication,
+    didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
+  ) -> Bool {
+    TSMobileAnalytics.initialize(
+      withCPID: "YOUR_CPID",
+      applicationName: "YourAppName",
+      trackingType: .TrackPanelistsOnly,
+      enableSystemIdentifierTracking: false,
+      isWebViewBased: false,
+      keychainAccessGroup: nil
+    )
+
+    let delegate = ReactNativeDelegate()
+    let factory = RCTReactNativeFactory(delegate: delegate)
+    delegate.dependencyProvider = RCTAppDependencyProvider()
+    reactNativeDelegate = delegate
+    reactNativeFactory = factory
+
+    window = UIWindow(frame: UIScreen.main.bounds)
+    factory.startReactNative(
+      withModuleName: "MyApp",
+      in: window,
+      launchOptions: launchOptions
+    )
+    return true
+  }
+
+  func application(
+    _ app: UIApplication,
+    open url: URL,
+    options: [UIApplication.OpenURLOptionsKey: Any] = [:]
+  ) -> Bool {
+    TSMobileAnalytics.application(app, open: url, options: options)
+    return true
+  }
+}
+
+class ReactNativeDelegate: RCTDefaultReactNativeFactoryDelegate {
+  override func sourceURL(for bridge: RCTBridge) -> URL? {
+    self.bundleURL()
+  }
+
+  override func bundleURL() -> URL? {
+    #if DEBUG
+    RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: "index")
+    #else
+    Bundle.main.url(forResource: "main", withExtension: "jsbundle")
+    #endif
+  }
+}
+```
+
+React Native 0.76 and earlier — projects use an Objective-C++ `AppDelegate`. Update `ios/MyApp/AppDelegate.mm`:
+
+```objc
+#import "AppDelegate.h"
+#import "MyApp-Swift.h"
+
+- (BOOL)application:(UIApplication *)application
+    didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+  self.moduleName = @"MyApp";
+  self.initialProps = @{};
+  [TSMobileAnalytics initializeWithCPID:@"YOUR_CPID"
+                        applicationName:@"YourAppName"
+                           trackingType:TrackingTypeTrackPanelistsOnly
+          enableSystemIdentifierTracking:NO
+                        isWebViewBased:NO
+                    keychainAccessGroup:nil];
+  return [super application:application didFinishLaunchingWithOptions:launchOptions];
+}
+
+- (BOOL)application:(UIApplication *)app
+            openURL:(NSURL *)url
+            options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options
+{
+  [TSMobileAnalytics application:app open:url options:options];
+  return YES;
+}
+```
+
+**5. Send tags from JavaScript**
+
+```js
+// utils/analytics.js
+import { NativeModules, Platform } from 'react-native';
+
+const { SifoModule } = NativeModules;
+
+export function trackView(categories, contentID) {
+  if (Platform.OS === 'ios' && SifoModule) {
+    SifoModule.sendTag(categories, contentID);
+  }
+}
+```
+
+Call it whenever a new screen or piece of content is shown:
+
+```js
+import { useEffect } from 'react';
+import { trackView } from '../utils/analytics';
+
+export default function ArticleScreen({ article }) {
+  useEffect(() => {
+    trackView(['news', article.section], article.id);
+  }, [article.id]);
+}
+```
+
+---
+
+### Expo
+
+**1. Run prebuild**
+
+```bash
+npx expo prebuild
+```
+
+This generates the `ios/` folder. All steps below take place inside it.
+
+**2. Add the SPM package**
+
+Open `ios/MyApp.xcworkspace` in Xcode, go to **File → Add Package Dependencies…**, and enter:
+
+```
+https://github.com/kantarsifo/SifoInternet_IOS_SDK.git
+```
+
+Select the `TSMobileAnalytics` library and add it to your app target.
+
+**3. Configure Info.plist**
+
+The config plugin below handles this automatically. If you prefer to do it manually, add the same entries as in the bare React Native section to `ios/MyApp/Info.plist`.
+
+To apply it automatically, create `plugins/withSifoSDK.js` in your project root:
+
+```js
+const { withInfoPlist } = require('@expo/config-plugins');
+
+const withSifoPlist = (config) =>
+  withInfoPlist(config, (mod) => {
+    const plist = mod.modResults;
+    const bundleId = config.ios?.bundleIdentifier ?? 'com.example.app';
+
+    if (!plist.LSApplicationQueriesSchemes) plist.LSApplicationQueriesSchemes = [];
+    if (!plist.LSApplicationQueriesSchemes.includes('se.tns-sifo.internetpanelen')) {
+      plist.LSApplicationQueriesSchemes.push('se.tns-sifo.internetpanelen');
+    }
+
+    if (!plist.CFBundleURLTypes) plist.CFBundleURLTypes = [];
+    const scheme = `${bundleId}.tsmobileanalytics`;
+    if (!plist.CFBundleURLTypes.some((t) => t.CFBundleURLSchemes?.includes(scheme))) {
+      plist.CFBundleURLTypes.push({ CFBundleTypeRole: 'None', CFBundleURLSchemes: [scheme] });
+    }
+
+    return mod;
+  });
+
+module.exports = (config) => withSifoPlist(config);
+```
+
+Register it in `app.json`:
+
+```json
+{
+  "expo": {
+    "plugins": ["./plugins/withSifoSDK"],
+    "ios": {
+      "bundleIdentifier": "com.yourcompany.myapp"
+    }
+  }
+}
+```
+
+**4. Create the native module files**
+
+Create both files inside the app target folder — **not** the `ios/` root:
+
+`ios/MyApp/SifoModule.swift`:
+
+```swift
+import Foundation
+import TSMobileAnalytics
+
+@objc(SifoModule)
+class SifoModule: NSObject {
+
+  @objc(sendTag:contentID:)
+  func sendTag(categories: [String], contentID: String) {
+    TSMobileAnalytics.sendTag(
+      withCategories: categories,
+      contentID: contentID
+    ) { _, error in
+      if let error = error { print("[Sifo] \(error)") }
+    }
+  }
+
+  @objc static func requiresMainQueueSetup() -> Bool { false }
+}
+```
+
+`ios/MyApp/SifoModule.m`:
+
+```objc
+#import <React/RCTBridgeModule.h>
+
+@interface RCT_EXTERN_MODULE(SifoModule, NSObject)
+RCT_EXTERN_METHOD(sendTag:(NSArray *)categories contentID:(NSString *)contentID)
+@end
+```
+
+**5. Add both files to the Xcode target**
+
+Files on disk are not automatically included in the build. In Xcode, right-click the `MyApp` group in the left sidebar, choose **Add Files to "MyApp"…**, and select both `SifoModule.swift` and `SifoModule.m`. Make sure **Add to targets: MyApp** is checked.
+
+When prompted about the bridging header, click **Yes**. Then add the following to the generated header:
+
+```objc
+#import <React/RCTBridgeModule.h>
+```
+
+If Xcode does not prompt (the project already has Swift files), create the bridging header manually and set its path in **Build Settings → Swift Compiler — General → Objective-C Bridging Header**.
+
+**6. Initialize in AppDelegate**
+
+Expo generates an `ExpoAppDelegate`-based `AppDelegate.swift`. Add the `TSMobileAnalytics.initialize` call and the `openURL` handler to `ios/MyApp/AppDelegate.swift`:
+
+```swift
+import Expo
+import React
+import ReactAppDependencyProvider
+import TSMobileAnalytics
+
+@UIApplicationMain
+public class AppDelegate: ExpoAppDelegate {
+  var window: UIWindow?
+  var reactNativeDelegate: ExpoReactNativeFactoryDelegate?
+  var reactNativeFactory: RCTReactNativeFactory?
+
+  public override func application(
+    _ application: UIApplication,
+    didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
+  ) -> Bool {
+    TSMobileAnalytics.initialize(
+      withCPID: "YOUR_CPID",
+      applicationName: "YourAppName",
+      trackingType: .TrackPanelistsOnly,
+      enableSystemIdentifierTracking: false,
+      isWebViewBased: false,
+      keychainAccessGroup: nil
+    )
+
+    let delegate = ReactNativeDelegate()
+    let factory = ExpoReactNativeFactory(delegate: delegate)
+    delegate.dependencyProvider = RCTAppDependencyProvider()
+    reactNativeDelegate = delegate
+    reactNativeFactory = factory
+    bindReactNativeFactory(factory)
+
+    #if os(iOS) || os(tvOS)
+    window = UIWindow(frame: UIScreen.main.bounds)
+    factory.startReactNative(
+      withModuleName: "main",
+      in: window,
+      launchOptions: launchOptions)
+    #endif
+
+    return super.application(application, didFinishLaunchingWithOptions: launchOptions)
+  }
+
+  public override func application(
+    _ app: UIApplication,
+    open url: URL,
+    options: [UIApplication.OpenURLOptionsKey: Any] = [:]
+  ) -> Bool {
+    TSMobileAnalytics.application(app, open: url, options: options)
+    return super.application(app, open: url, options: options)
+      || RCTLinkingManager.application(app, open: url, options: options)
+  }
+
+  public override func application(
+    _ application: UIApplication,
+    continue userActivity: NSUserActivity,
+    restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void
+  ) -> Bool {
+    let result = RCTLinkingManager.application(application, continue: userActivity, restorationHandler: restorationHandler)
+    return super.application(application, continue: userActivity, restorationHandler: restorationHandler) || result
+  }
+}
+
+class ReactNativeDelegate: ExpoReactNativeFactoryDelegate {
+  override func sourceURL(for bridge: RCTBridge) -> URL? {
+    bridge.bundleURL ?? bundleURL()
+  }
+
+  override func bundleURL() -> URL? {
+    #if DEBUG
+    return RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: ".expo/.virtual-metro-entry")
+    #else
+    return Bundle.main.url(forResource: "main", withExtension: "jsbundle")
+    #endif
+  }
+}
+```
+
+**7. Send tags from JavaScript**
+
+Same as the bare React Native section — see **Send tags from JavaScript** above.
+
+**8. Build**
+
+```bash
+eas build --platform ios
+# or for local builds:
+npx expo run:ios
+```
+
+> **Bare workflow:** The `ios/` folder already exists. Follow steps 2–7 above directly, and use the config plugin to ensure `npx expo prebuild` re-applies your `Info.plist` changes idempotently rather than overwriting them.
+
+---
+
 ## Sending tags
 
 To get a good measure of the usage, your application should send a tag every time a new view or page of content is shown to the user. This tag should contain information about what content the user is seeing. For example when the user opens the application and its main view is shown, a tag should be sent. When the user shows a list, an article, a video or some other page in your application, another tag should be sent, and so on.
