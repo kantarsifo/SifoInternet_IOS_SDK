@@ -1,0 +1,194 @@
+{
+  "": {
+    "swift-dependencies": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/master.swiftdeps"
+  },
+  "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/Sources/TSMobileAnalytics/Enums/StringBool.swift": {
+    "dependencies": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/StringBool.d",
+    "object": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/StringBool.swift.o",
+    "swiftmodule": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/StringBool~partial.swiftmodule",
+    "swift-dependencies": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/StringBool.swiftdeps",
+    "diagnostics": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/StringBool.dia"
+  },
+  "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/Sources/TSMobileAnalytics/Enums/TrackingType.swift": {
+    "dependencies": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/TrackingType.d",
+    "object": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/TrackingType.swift.o",
+    "swiftmodule": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/TrackingType~partial.swiftmodule",
+    "swift-dependencies": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/TrackingType.swiftdeps",
+    "diagnostics": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/TrackingType.dia"
+  },
+  "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/Sources/TSMobileAnalytics/Error/APIError.swift": {
+    "dependencies": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/APIError.d",
+    "object": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/APIError.swift.o",
+    "swiftmodule": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/APIError~partial.swiftmodule",
+    "swift-dependencies": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/APIError.swiftdeps",
+    "diagnostics": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/APIError.dia"
+  },
+  "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/Sources/TSMobileAnalytics/Error/SendTagError.swift": {
+    "dependencies": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/SendTagError.d",
+    "object": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/SendTagError.swift.o",
+    "swiftmodule": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/SendTagError~partial.swiftmodule",
+    "swift-dependencies": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/SendTagError.swiftdeps",
+    "diagnostics": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/SendTagError.dia"
+  },
+  "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/Sources/TSMobileAnalytics/Extensions/Array+.swift": {
+    "dependencies": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/Array+.d",
+    "object": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/Array+.swift.o",
+    "swiftmodule": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/Array+~partial.swiftmodule",
+    "swift-dependencies": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/Array+.swiftdeps",
+    "diagnostics": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/Array+.dia"
+  },
+  "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/Sources/TSMobileAnalytics/Extensions/Bundle+.swift": {
+    "dependencies": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/Bundle+.d",
+    "object": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/Bundle+.swift.o",
+    "swiftmodule": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/Bundle+~partial.swiftmodule",
+    "swift-dependencies": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/Bundle+.swiftdeps",
+    "diagnostics": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/Bundle+.dia"
+  },
+  "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/Sources/TSMobileAnalytics/Extensions/Collection+.swift": {
+    "dependencies": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/Collection+.d",
+    "object": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/Collection+.swift.o",
+    "swiftmodule": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/Collection+~partial.swiftmodule",
+    "swift-dependencies": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/Collection+.swiftdeps",
+    "diagnostics": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/Collection+.dia"
+  },
+  "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/Sources/TSMobileAnalytics/Extensions/Date+.swift": {
+    "dependencies": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/Date+.d",
+    "object": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/Date+.swift.o",
+    "swiftmodule": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/Date+~partial.swiftmodule",
+    "swift-dependencies": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/Date+.swiftdeps",
+    "diagnostics": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/Date+.dia"
+  },
+  "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/Sources/TSMobileAnalytics/Extensions/HTTPCookie+.swift": {
+    "dependencies": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/HTTPCookie+.d",
+    "object": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/HTTPCookie+.swift.o",
+    "swiftmodule": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/HTTPCookie+~partial.swiftmodule",
+    "swift-dependencies": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/HTTPCookie+.swiftdeps",
+    "diagnostics": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/HTTPCookie+.dia"
+  },
+  "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/Sources/TSMobileAnalytics/Extensions/Sequence+.swift": {
+    "dependencies": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/Sequence+.d",
+    "object": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/Sequence+.swift.o",
+    "swiftmodule": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/Sequence+~partial.swiftmodule",
+    "swift-dependencies": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/Sequence+.swiftdeps",
+    "diagnostics": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/Sequence+.dia"
+  },
+  "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/Sources/TSMobileAnalytics/Extensions/String+.swift": {
+    "dependencies": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/String+.d",
+    "object": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/String+.swift.o",
+    "swiftmodule": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/String+~partial.swiftmodule",
+    "swift-dependencies": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/String+.swiftdeps",
+    "diagnostics": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/String+.dia"
+  },
+  "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/Sources/TSMobileAnalytics/Extensions/URL+.swift": {
+    "dependencies": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/URL+.d",
+    "object": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/URL+.swift.o",
+    "swiftmodule": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/URL+~partial.swiftmodule",
+    "swift-dependencies": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/URL+.swiftdeps",
+    "diagnostics": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/URL+.dia"
+  },
+  "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/Sources/TSMobileAnalytics/Extensions/WKWebView+.swift": {
+    "dependencies": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/WKWebView+.d",
+    "object": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/WKWebView+.swift.o",
+    "swiftmodule": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/WKWebView+~partial.swiftmodule",
+    "swift-dependencies": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/WKWebView+.swiftdeps",
+    "diagnostics": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/WKWebView+.dia"
+  },
+  "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/Sources/TSMobileAnalytics/Logger/ConsoleLogger.swift": {
+    "dependencies": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/ConsoleLogger.d",
+    "object": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/ConsoleLogger.swift.o",
+    "swiftmodule": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/ConsoleLogger~partial.swiftmodule",
+    "swift-dependencies": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/ConsoleLogger.swiftdeps",
+    "diagnostics": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/ConsoleLogger.dia"
+  },
+  "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/Sources/TSMobileAnalytics/Logger/Logger.swift": {
+    "dependencies": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/Logger.d",
+    "object": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/Logger.swift.o",
+    "swiftmodule": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/Logger~partial.swiftmodule",
+    "swift-dependencies": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/Logger.swiftdeps",
+    "diagnostics": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/Logger.dia"
+  },
+  "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/Sources/TSMobileAnalytics/Logger/Verbosity.swift": {
+    "dependencies": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/Verbosity.d",
+    "object": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/Verbosity.swift.o",
+    "swiftmodule": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/Verbosity~partial.swiftmodule",
+    "swift-dependencies": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/Verbosity.swiftdeps",
+    "diagnostics": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/Verbosity.dia"
+  },
+  "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/Sources/TSMobileAnalytics/Model/SyncResponse.swift": {
+    "dependencies": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/SyncResponse.d",
+    "object": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/SyncResponse.swift.o",
+    "swiftmodule": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/SyncResponse~partial.swiftmodule",
+    "swift-dependencies": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/SyncResponse.swiftdeps",
+    "diagnostics": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/SyncResponse.dia"
+  },
+  "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/Sources/TSMobileAnalytics/TSMobileAnalytics.swift": {
+    "dependencies": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/TSMobileAnalytics.d",
+    "object": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/TSMobileAnalytics.swift.o",
+    "swiftmodule": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/TSMobileAnalytics~partial.swiftmodule",
+    "swift-dependencies": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/TSMobileAnalytics.swiftdeps",
+    "diagnostics": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/TSMobileAnalytics.dia"
+  },
+  "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/Sources/TSMobileAnalytics/Utilities/APIService.swift": {
+    "dependencies": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/APIService.d",
+    "object": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/APIService.swift.o",
+    "swiftmodule": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/APIService~partial.swiftmodule",
+    "swift-dependencies": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/APIService.swiftdeps",
+    "diagnostics": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/APIService.dia"
+  },
+  "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/Sources/TSMobileAnalytics/Utilities/CookieManager.swift": {
+    "dependencies": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/CookieManager.d",
+    "object": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/CookieManager.swift.o",
+    "swiftmodule": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/CookieManager~partial.swiftmodule",
+    "swift-dependencies": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/CookieManager.swiftdeps",
+    "diagnostics": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/CookieManager.dia"
+  },
+  "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/Sources/TSMobileAnalytics/Utilities/IdentificationManager.swift": {
+    "dependencies": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/IdentificationManager.d",
+    "object": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/IdentificationManager.swift.o",
+    "swiftmodule": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/IdentificationManager~partial.swiftmodule",
+    "swift-dependencies": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/IdentificationManager.swiftdeps",
+    "diagnostics": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/IdentificationManager.dia"
+  },
+  "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/Sources/TSMobileAnalytics/Utilities/JSONLoadable.swift": {
+    "dependencies": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/JSONLoadable.d",
+    "object": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/JSONLoadable.swift.o",
+    "swiftmodule": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/JSONLoadable~partial.swiftmodule",
+    "swift-dependencies": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/JSONLoadable.swiftdeps",
+    "diagnostics": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/JSONLoadable.dia"
+  },
+  "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/Sources/TSMobileAnalytics/Utilities/JSONManager.swift": {
+    "dependencies": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/JSONManager.d",
+    "object": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/JSONManager.swift.o",
+    "swiftmodule": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/JSONManager~partial.swiftmodule",
+    "swift-dependencies": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/JSONManager.swiftdeps",
+    "diagnostics": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/JSONManager.dia"
+  },
+  "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/Sources/TSMobileAnalytics/Utilities/KeychainItemWrapper.swift": {
+    "dependencies": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/KeychainItemWrapper.d",
+    "object": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/KeychainItemWrapper.swift.o",
+    "swiftmodule": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/KeychainItemWrapper~partial.swiftmodule",
+    "swift-dependencies": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/KeychainItemWrapper.swiftdeps",
+    "diagnostics": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/KeychainItemWrapper.dia"
+  },
+  "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/Sources/TSMobileAnalytics/Utilities/SDKIntegrationValidator.swift": {
+    "dependencies": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/SDKIntegrationValidator.d",
+    "object": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/SDKIntegrationValidator.swift.o",
+    "swiftmodule": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/SDKIntegrationValidator~partial.swiftmodule",
+    "swift-dependencies": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/SDKIntegrationValidator.swiftdeps",
+    "diagnostics": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/SDKIntegrationValidator.dia"
+  },
+  "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/Sources/TSMobileAnalytics/Utilities/Storage.swift": {
+    "dependencies": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/Storage.d",
+    "object": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/Storage.swift.o",
+    "swiftmodule": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/Storage~partial.swiftmodule",
+    "swift-dependencies": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/Storage.swiftdeps",
+    "diagnostics": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/Storage.dia"
+  },
+  "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/DerivedSources/resource_bundle_accessor.swift": {
+    "dependencies": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/resource_bundle_accessor.d",
+    "object": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/resource_bundle_accessor.swift.o",
+    "swiftmodule": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/resource_bundle_accessor~partial.swiftmodule",
+    "swift-dependencies": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/resource_bundle_accessor.swiftdeps",
+    "diagnostics": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/resource_bundle_accessor.dia"
+  }
+}

@@ -1,0 +1,3 @@
+module TSMobileAnalytics {
+    header "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalytics.build/include/TSMobileAnalytics-Swift.h"
+}

@@ -1,0 +1,12 @@
+{
+  "": {
+    "swift-dependencies": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalyticsTests.build/master.swiftdeps"
+  },
+  "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/Tests/TSMobileAnalyticsTests/TSMobileAnalyticsTests.swift": {
+    "dependencies": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalyticsTests.build/TSMobileAnalyticsTests.d",
+    "object": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalyticsTests.build/TSMobileAnalyticsTests.swift.o",
+    "swiftmodule": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalyticsTests.build/TSMobileAnalyticsTests~partial.swiftmodule",
+    "swift-dependencies": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalyticsTests.build/TSMobileAnalyticsTests.swiftdeps",
+    "diagnostics": "/Users/lazarvelimirovic/Desktop/appCare/SifoInternet_IOS_SDK/.build/arm64-apple-macosx/debug/TSMobileAnalyticsTests.build/TSMobileAnalyticsTests.dia"
+  }
+}

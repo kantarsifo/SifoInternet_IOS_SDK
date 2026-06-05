@@ -1,0 +1,10 @@
+{
+    "CookieInfos": [
+        {
+            "domain": "mock domain",
+            "key": "mock key",
+            "value": "mock value",
+            "path": "mock path"
+        }
+    ]
+}
