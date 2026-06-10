@@ -8,14 +8,20 @@
 
 import Foundation
 
-enum SendTagError: Error {
+enum SendTagError: Error, Equatable {
+    case sdkNotInitialized
+    case noPanelistCookieAvailable
     case combinedCategoriesTooLong
     case contentIDTooLong
 }
 
-extension SendTagError: CustomStringConvertible {
-    var description: String {
+extension SendTagError: LocalizedError {
+    var errorDescription: String? {
         switch self {
+        case .sdkNotInitialized:
+            return "SDK has not been initialized."
+        case .noPanelistCookieAvailable:
+            return "Panelist-only tracking is enabled, but no panelist cookie is available."
         case .combinedCategoriesTooLong:
             return "Combined length of categories is too long."
         case .contentIDTooLong:

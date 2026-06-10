@@ -8,10 +8,35 @@
 
 import Foundation
 
-final class APIService {
-    private let jsonDecoder = JSONDecoder()
+protocol NetworkSession {
+    func dataTask(
+        with request: URLRequest,
+        completionHandler: @escaping @Sendable (Data?, URLResponse?, Error?) -> Void
+    ) -> NetworkDataTask
+}
 
-    init() {}
+protocol NetworkDataTask {
+    func resume()
+}
+
+extension URLSessionDataTask: NetworkDataTask {}
+
+extension URLSession: NetworkSession {
+    func dataTask(
+        with request: URLRequest,
+        completionHandler: @escaping @Sendable (Data?, URLResponse?, Error?) -> Void
+    ) -> NetworkDataTask {
+        let task: URLSessionDataTask = dataTask(with: request, completionHandler: completionHandler)
+        return task
+    }
+}
+
+final class APIService {
+    private let session: NetworkSession
+
+    init(session: NetworkSession = URLSession.shared) {
+        self.session = session
+    }
 
     public func sendTag(
         sdkVersion: String,
@@ -67,8 +92,8 @@ final class APIService {
 
         TSMobileAnalytics.logger.log(
             multipleLines: [
-                "URL for sending tag:",
-                url.absoluteString
+                "Prepared tag request.",
+                redactedQueryLog(from: url)
             ],
             verbosity: .debug)
 
@@ -142,7 +167,7 @@ final class APIService {
     }
 
     func syncURL(sdkVersion: String, appName: String, json: String) -> URL {
-        let parameters: KeyValuePairs<String,String> = [
+        let parameters: KeyValuePairs<String, String> = [
             .sdkVersion : sdkVersion,
             .appName.lowercased() : appName,
             .frameworkInfo : json
@@ -186,7 +211,7 @@ extension CharacterSet{
 
 private extension APIService {
     func performRequest(_ request: URLRequest , completion: @escaping (Result<Data, Error>) -> Void) {
-        URLSession.shared.dataTask(with: request) { data, response, error in
+        session.dataTask(with: request) { data, response, error in
             if let error {
                 completion(.failure(error))
                 return
@@ -214,19 +239,33 @@ private extension APIService {
         contentID.count <= .contentIDMaxLength
     }
 
-    func url(_ baseUrl: URL, withParameters parameters: KeyValuePairs<String,String>) -> URL {
+    func url(_ baseUrl: URL, withParameters parameters: KeyValuePairs<String, String>) -> URL {
         guard var urlComponents = URLComponents(url: baseUrl, resolvingAgainstBaseURL: false)
         else { return baseUrl }
 
-        var queryItems = urlComponents.queryItems ?? [URLQueryItem]()
-
-        for (key, value) in parameters {
-            queryItems.append(URLQueryItem(name: key.queryEncoded(), value: value.queryEncoded()))
+        urlComponents.queryItems = parameters.map { key, value in
+            URLQueryItem(name: key, value: value)
         }
-        
-        urlComponents.percentEncodedQueryItems = queryItems
 
         return urlComponents.url ?? baseUrl
+    }
+
+    func redactedQueryLog(from url: URL) -> String {
+        guard var components = URLComponents(url: url, resolvingAgainstBaseURL: false),
+              let queryItems = components.queryItems
+        else {
+            return url.absoluteString
+        }
+
+        components.queryItems = queryItems.map { item in
+            if Self.redactedQueryNames.contains(item.name) {
+                return URLQueryItem(name: item.name, value: "[REDACTED]")
+            }
+
+            return item
+        }
+
+        return components.url?.absoluteString ?? url.absoluteString
     }
 }
 
@@ -254,4 +293,11 @@ private extension String {
 private extension Int {
     static let categoryMaxLength = 255
     static let contentIDMaxLength = 255
+}
+
+private extension APIService {
+    static let redactedQueryNames: Set<String> = [
+        .appClientId,
+        .appRef
+    ]
 }

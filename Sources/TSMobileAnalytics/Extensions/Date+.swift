@@ -9,11 +9,9 @@
 import Foundation
 
 extension Date {
-    static let now = Date()
-
     func advancedBy(numberOfWeeks: Int) -> Date {
         var components = DateComponents()
         components.day = numberOfWeeks * 7
-        return Calendar.current.date(byAdding: components, to: self) ?? .now
+        return Calendar.current.date(byAdding: components, to: self) ?? Date()
     }
 }

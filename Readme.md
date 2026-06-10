@@ -100,13 +100,13 @@ The Sifo SDK is happy with whatever permissions your app uses.
 
 ## Integrate - Framework
 
-Minimum iOS deployment target: 9.0
+Recommended iOS deployment target: 11.0 or later.
 
 **1. Add library to project**
 
 Swift Package Manager:
-``` Ruby
-source 'https://github.com/kantarsifo/SifoInternet_IOS_SDK.git'
+``` swift
+.package(url: "https://github.com/kantarsifo/SifoInternet_IOS_SDK.git", from: "6.0.6")
 ``` 
 
 **2. Initialize the framework**
@@ -114,9 +114,10 @@ source 'https://github.com/kantarsifo/SifoInternet_IOS_SDK.git'
 ``` SWIFT
 class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        TSAnalyticsSwift.initialize(withCPID: ...,
+        TSMobileAnalytics.initialize(withCPID: ...,
                                      applicationName: ...,
                                      trackingType: ...,
+                                     enableSystemIdentifierTracking: ...,
                                      isWebViewBased: ...,
                                      keychainAccessGroup: ...)
         return true
@@ -128,7 +129,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 * `ApplicationName` - Name of your app, can be anything you like that makes sense.
 * `TrackingType` - Either `TrackPanelistsOnly` or `TrackUsersAndPanelists`.
 * `IsWebViewBased` - Set this to `true` if the app’s primary interface is displayed in one or many webviews.
-* `KeychainAccessGroup` - (Optional) Your app id or a shared app id if you have several apps sharing a keychain and your want to track the user between apps. If you don't need to use Shared Keychain functionality, then set this to `nil`.
+* `KeychainAccessGroup` - (Optional) Your app id or a shared app id if you have several apps sharing a keychain and you want to track the user between apps. If you don't need shared keychain functionality, set this to `nil`.
+  When this is set, the SDK persists the generated user identifier in the shared keychain and reuses it on later launches.
 
 ## Integration - Panelist support
 
@@ -184,12 +186,12 @@ func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpe
 
 If your app is webview-based, or contains content in occasional webviews that should be tracked, you need to tell the framework which webviews to track by adding them:
 ``` SWIFT
-TSMobileAnalytics.addWebview(webView)
+TSMobileAnalytics.addWebView(webView)
 ```
 
 And stop tracking it, if it's completely removed from the view hierarchy:
 ``` SWIFT
-TSMobileAnalytics.removeWebview(webView)
+TSMobileAnalytics.removeWebView(webView)
 ```
 
 **4. Shared Keychain (optional).**
@@ -215,6 +217,7 @@ TSMobileAnalytics.sendTag(withCategories: ...,
 
 * Categories is an array of strings.
 * Id is a string with the identifier of the current content.
+* If you provide a completion block, it is always called. Initialization failures, validation failures, and panelist-only tracking without a synced cookie are all reported through that callback.
 
 ## Frequently asked questions (FAQ)
 

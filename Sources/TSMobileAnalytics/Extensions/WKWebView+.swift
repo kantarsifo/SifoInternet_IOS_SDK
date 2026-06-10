@@ -18,7 +18,7 @@ extension WKWebView {
             $0 += javaScriptSubstring(key: $1.key, value: $1.value)
         }
 
-        evaluateJavaScript(javaScript, withRetryAttempts: 60)
+        evaluateJavaScript(javaScript, withRetryAttempts: .localStorageRetryLimit)
     }
 }
 
@@ -33,8 +33,8 @@ private extension WKWebView {
     ///
     /// The function `evaluateJavaScript(_:)` fails if `self` has not finished navigating.
     ///
-    /// This is not a great solution, and should probably be replaced with delegation or something,
-    /// but was translated directly from the previous Objective-C codebase.
+    /// This still uses retry-based coordination instead of a navigation delegate,
+    /// but keeps retries bounded so the SDK does not keep polling indefinitely.
     ///
     /// - Parameters:
     ///   - javaScript: The java script to evaluate.
@@ -62,4 +62,8 @@ private extension WKWebView {
             }
         }
     }
+}
+
+private extension Int {
+    static let localStorageRetryLimit = 10
 }

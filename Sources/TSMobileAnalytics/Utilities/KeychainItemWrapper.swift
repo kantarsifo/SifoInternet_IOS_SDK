@@ -6,41 +6,107 @@
 //  Copyright © 2023 Kantar Sifo. All rights reserved.
 //
 
-
 import Foundation
 
-final class KeychainItemWrapper {
-    private var genericSearchQuery = [CFString: Any]()
-    private var keychainItems = [CFString: Any]()
+protocol KeychainClient {
+    func add(_ attributes: [CFString: Any]) -> OSStatus
+    func copyMatching(_ query: [CFString: Any], result: inout CFTypeRef?) -> OSStatus
+    func update(_ query: [CFString: Any], attributesToUpdate: [CFString: Any]) -> OSStatus
+}
 
+struct SecurityKeychainClient: KeychainClient {
+    func add(_ attributes: [CFString: Any]) -> OSStatus {
+        SecItemAdd(attributes as CFDictionary, nil)
+    }
+
+    func copyMatching(_ query: [CFString: Any], result: inout CFTypeRef?) -> OSStatus {
+        SecItemCopyMatching(query as CFDictionary, &result)
+    }
+
+    func update(_ query: [CFString: Any], attributesToUpdate: [CFString: Any]) -> OSStatus {
+        SecItemUpdate(query as CFDictionary, attributesToUpdate as CFDictionary)
+    }
+}
+
+final class KeychainItemWrapper {
     private let identifier: String
     private let accessGroup: String
+    private let account: String
+    private let service: String
+    private let keychainClient: KeychainClient
 
-    var keychainData: Data? {
-        keychainItems[kSecValueData] as? Data? ?? nil
-    }
+    private(set) var keychainData: Data?
 
-    init(identifier: String, accessGroup: String) {
-        self.identifier = identifier
-        self.accessGroup = accessGroup
-
-        configureGenericSearchQuery()
-
-        performSearchQuery()
-    }
-
-    func setKeychainItems(
+    init(
+        identifier: String,
         accessGroup: String,
-        securityClass: CFString,
         account: String,
         service: String,
-        data: CFData?
+        keychainClient: KeychainClient = SecurityKeychainClient()
     ) {
-        keychainItems[kSecAttrAccessGroup] = accessGroup
-        keychainItems[kSecClassKey] = securityClass
-        keychainItems[kSecAttrAccount] = account
-        keychainItems[kSecAttrService] = service
-        keychainItems[kSecValueData] = data
+        self.identifier = identifier
+        self.accessGroup = accessGroup
+        self.account = account
+        self.service = service
+        self.keychainClient = keychainClient
+
+        reload()
+    }
+
+    func setKeychainData(_ data: Data) {
+        let query = itemQuery(returnData: false)
+        var result: CFTypeRef?
+        let status = keychainClient.copyMatching(query, result: &result)
+
+        switch status {
+        case errSecSuccess:
+            let updateStatus = keychainClient.update(query, attributesToUpdate: [
+                kSecValueData: data
+            ])
+
+            guard updateStatus == errSecSuccess else {
+                TSMobileAnalytics.logger.log(
+                    message: "Failed to update keychain item.",
+                    verbosity: .error)
+                return
+            }
+        case errSecItemNotFound:
+            var attributes = itemQuery(returnData: false)
+            attributes[kSecValueData] = data
+
+            let addStatus = keychainClient.add(attributes)
+            guard addStatus == errSecSuccess else {
+                TSMobileAnalytics.logger.log(
+                    message: "Failed to add keychain item.",
+                    verbosity: .error)
+                return
+            }
+        default:
+            TSMobileAnalytics.logger.log(
+                message: "Unexpected status code while writing keychain item: \(status).",
+                verbosity: .error)
+            return
+        }
+
+        keychainData = data
+    }
+
+    func reload() {
+        let query = itemQuery(returnData: true)
+        var result: CFTypeRef?
+        let status = keychainClient.copyMatching(query, result: &result)
+
+        switch status {
+        case errSecSuccess:
+            keychainData = result as? Data
+        case errSecItemNotFound:
+            keychainData = nil
+        default:
+            keychainData = nil
+            TSMobileAnalytics.logger.log(
+                message: "Failed to retrieve keychain item.",
+                verbosity: .error)
+        }
     }
 
     static func bundleSeedID() -> String? {
@@ -51,7 +117,6 @@ final class KeychainItemWrapper {
         query[kSecReturnAttributes] = kCFBooleanTrue
 
         var result: CFTypeRef?
-
         var status = SecItemCopyMatching(query as CFDictionary, &result)
         if status == errSecItemNotFound {
             status = SecItemAdd(query as CFDictionary, &result)
@@ -61,7 +126,7 @@ final class KeychainItemWrapper {
               let result = result as? [CFString: Any],
               let accessGroup = result[kSecAttrAccessGroup] as? String,
               let bundleSeedId = accessGroup.components(
-                separatedBy: .init(charactersIn: .dot)).first
+                separatedBy: CharacterSet(charactersIn: .dot)).first
         else {
             TSMobileAnalytics.logger.log(
                 message: "Failed to get bundle seed id.",
@@ -73,122 +138,25 @@ final class KeychainItemWrapper {
     }
 }
 
- // MARK: - Private
 private extension KeychainItemWrapper {
+    func itemQuery(returnData: Bool) -> [CFString: Any] {
+        var query = [CFString: Any]()
+        query[kSecClass] = kSecClassGenericPassword
+        query[kSecAttrGeneric] = identifier.data(using: .utf8)
+        query[kSecAttrAccount] = account
+        query[kSecAttrService] = service
+        query[kSecMatchLimit] = kSecMatchLimitOne
 
-    func configureGenericSearchQuery() {
-        genericSearchQuery[kSecClass] = kSecClassGenericPassword
-        genericSearchQuery[kSecAttrGeneric] = identifier
-        genericSearchQuery[kSecMatchLimit] = kSecMatchLimitOne
-        genericSearchQuery[kSecReturnAttributes] = kCFBooleanTrue
-        genericSearchQuery = dictionaryByAddingAccessGroup(accessGroup, to: genericSearchQuery)
-    }
-
-    func performSearchQuery() {
-        let newSearchQuery = genericSearchQuery
-        var outputDictionary: CFTypeRef?
-
-        let status = SecItemCopyMatching(newSearchQuery as CFDictionary, &outputDictionary)
-
-        guard let outputDictionary = outputDictionary as? [CFString: Any],
-              status == noErr
-        else {
-            deleteKeychainItems(in: keychainItems)
-            setDefaultValuesForKeychainItemData(identifier: identifier, accessGroup: accessGroup)
-            TSMobileAnalytics.logger.log(
-                message: "Unexpected result for keychain search query.",
-                verbosity: .error)
-
-            return
-        }
-        keychainItems = dictionaryFromSecItemFormattedDictionary(outputDictionary)
-    }
-
-    /// Sets the provided accessGroup for the key `kSecAttrAccessGroup` in the provided dictionary,
-    /// provided that the app is not running in the Simulator.
-    ///
-    /// Apps that are built for the Simulator aren't signed,
-    /// so in this case, there's no keychain access group for the simulator to check.
-    ///
-    /// This means that all apps can see all keychain items when run in simulator.
-    ///
-    /// If a SecItem contains an access group attribute, SecItemAdd and SecItemUpdate
-    /// in the Simulator will return -25243 (errSecNoAccessForItem).
-    func dictionaryByAddingAccessGroup(_ accessGroup: String, to dictionary: [CFString : Any]) -> [CFString : Any] {
 #if !targetEnvironment(simulator)
-        var dictionary = dictionary
-        dictionary[kSecAttrAccessGroup] = accessGroup
+        query[kSecAttrAccessGroup] = accessGroup
 #endif
-        return dictionary
-    }
 
-    func deleteKeychainItems(in keychainItems: [CFString: Any]) {
-        guard !keychainItems.isEmpty else {
-            return
+        if returnData {
+            query[kSecReturnData] = kCFBooleanTrue
         }
 
-        let secItemDictionary = secItemFormattedDictionary(from: keychainItems)
-        let status = SecItemDelete(secItemDictionary as CFDictionary)
-
-        guard status == noErr || status == errSecItemNotFound
-        else {
-            TSMobileAnalytics.logger.log(
-                message: "Failed to delete keychain item.",
-                verbosity: .warning)
-            return
-        }
+        return query
     }
-
-    func setDefaultValuesForKeychainItemData(identifier: String, accessGroup: String) {
-        keychainItems[kSecAttrAccount] = String.empty
-        keychainItems[kSecAttrLabel] = String.empty
-        keychainItems[kSecAttrDescription] = String.empty
-        keychainItems[kSecValueData] = String.empty
-        keychainItems[kSecAttrGeneric] = identifier
-        keychainItems = dictionaryByAddingAccessGroup(accessGroup, to: keychainItems)
-    }
-
-    func secItemFormattedDictionary(from dictionary: [CFString: Any]) -> [CFString: Any] {
-        var dictionary = dictionary
-
-        dictionary[kSecClass] = kSecClassGenericPassword
-
-        guard let string = dictionary[kSecValueData] as? String,
-              let data = string.data(using: .utf8)
-        else {
-            TSMobileAnalytics.logger.log(
-                message: "Failed to format dictionary.",
-                verbosity: .error)
-            return dictionary
-        }
-
-        dictionary[kSecValueData] = data
-
-        return dictionary
-    }
-
-    func dictionaryFromSecItemFormattedDictionary(_ secItemFormatted: [CFString: Any]) -> [CFString: Any] {
-        var dictionary = [CFString: Any]()
-        dictionary[kSecReturnData] = kCFBooleanTrue
-        dictionary[kSecClass] = kSecClassGenericPassword
-
-        var passwordData: CFTypeRef?
-        let status = SecItemCopyMatching(dictionary as CFDictionary, &passwordData)
-
-        guard let passwordData = passwordData as? Data,
-              status == noErr
-        else {
-            TSMobileAnalytics.logger.log(
-                message: "Failed to retrieve keychain item.",
-                verbosity: .error)
-            return dictionary
-        }
-        dictionary.removeValue(forKey: kSecReturnData)
-        dictionary[kSecValueData] = passwordData
-
-        return dictionary
-    }
-
 }
 
 private extension String {

@@ -7,8 +7,10 @@
 //
 
 import Foundation
-import SwiftUI
 import WebKit
+#if canImport(UIKit)
+import UIKit
+#endif
 
 public final class TSMobileAnalytics {
 
@@ -21,13 +23,12 @@ public final class TSMobileAnalytics {
     static let logger = ConsoleLogger()
 
     private let jsonDecoder = JSONDecoder()
-    private let apiService = APIService()
+    private let apiService: APIService
 
     private let cpid: String
     private let applicationName: String
     private let trackingType: TrackingType
     private let isWebViewBased: Bool
-    private let keychainAccessGroup: String?
     private let additionals: [String: String]
     private var keychainItemWrapper: KeychainItemWrapper?
 
@@ -54,18 +55,8 @@ public final class TSMobileAnalytics {
         Storage.shared.cookieString != nil
     }
 
-    private var isSifoInternetAppInstalled: Bool {
-        UIApplication.shared.canOpenURL(URL.panelistAppUrl)
-    }
-
     private var isTrackingPanelistsOnly: Bool {
         trackingType == .TrackPanelistsOnly
-    }
-
-    /// Used to check if the host app can be re-opened from Sifo Internet app,
-    /// once that has been opened.
-    private var hostAppIncludesExpectedUrlScheme: Bool {
-        UIApplication.shared.canOpenURL(URL.appUrl)
     }
 
     private var shouldSyncWithSifoInternetApp: Bool {
@@ -101,14 +92,15 @@ public final class TSMobileAnalytics {
         isSystemIdentifierTrackingEnabled: Bool,
         isWebViewBased: Bool,
         keychainAccessGroup: String?,
-        additionals: [String: String] = [String: String]()
+        additionals: [String: String] = [String: String](),
+        apiService: APIService = APIService()
     ) {
         self.cpid = cpid
         self.applicationName = applicationName
         self.trackingType = trackingType
         self.isWebViewBased = isWebViewBased
-        self.keychainAccessGroup = keychainAccessGroup
         self.additionals = additionals
+        self.apiService = apiService
 
         self.shouldSyncWithBackendFirst = additionals[Keys.shouldSyncWithBackendFirst] ?? "true" == StringBool.true.rawValue
         self.shouldUseJsonUrlSchemeSyncFormat = additionals[Keys.shouldUseJsonUrlSchemeSyncFormat] ?? "true" == StringBool.true.rawValue
@@ -187,6 +179,7 @@ public final class TSMobileAnalytics {
         }
     }
 
+    #if canImport(UIKit)
     @discardableResult public static func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any]) -> Bool {
         if url.scheme?.lowercased() == Bundle.main.exchangeUrlScheme.lowercased() {
             DispatchQueue.main.async {
@@ -196,12 +189,14 @@ public final class TSMobileAnalytics {
 
         return true
     }
+    #endif
 
     public static func sendTag(withCategories categories: [String], contentID: String? = nil, completion: ((Bool, Error?) -> Void)? = nil) {
         guard let sharedInstance = Self.shared else {
             Self.logger.log(
                 message: "Send tag failed: SDK has not been initialized.",
                 verbosity: .error)
+            completion?(false, SendTagError.sdkNotInitialized)
             return
         }
 
@@ -209,6 +204,7 @@ public final class TSMobileAnalytics {
             Self.logger.log(
                 message: "Send tag failed: Only tracking panelists and no cookies stored.",
                 verbosity: .warning)
+            completion?(false, SendTagError.noPanelistCookieAvailable)
             return
         }
 
@@ -228,9 +224,10 @@ public final class TSMobileAnalytics {
 }
 
 // MARK: - Private
-private extension TSMobileAnalytics {
+extension TSMobileAnalytics {
 
     static let devicePrefix: String? = {
+        #if canImport(UIKit)
         switch UIDevice.current.userInterfaceIdiom {
         case .phone:
             return "APP_IPHONE_"
@@ -239,10 +236,23 @@ private extension TSMobileAnalytics {
         default:
             return nil
         }
+        #else
+        return nil
+        #endif
     }()
 
     static func isForcingReinitialization(additionals: [String: String]) -> Bool {
         additionals[Keys.isForcingReinitialization] == StringBool.true.rawValue
+    }
+
+    static func shouldAttemptSync(nextSyncDate: Date?, now: Date = Date()) -> Bool {
+        guard let nextSyncDate else { return true }
+        return nextSyncDate <= now
+    }
+
+    static func nextSyncDate(after previousDate: Date?, now: Date = Date()) -> Date {
+        let numberOfWeeks = previousDate == nil ? 2 : 12
+        return now.advancedBy(numberOfWeeks: numberOfWeeks)
     }
 
     func jsonFromAdditionalsDictionary(_ additionals: [String: String]) -> String? {
@@ -275,7 +285,7 @@ private extension TSMobileAnalytics {
         guard isOldPanelUserInfoCached || isSifoInternetAppInstalled
         else { return }
 
-        if (IdentificationManager.shared.isSystemIdentifierTrackingEnabled && shouldSyncWithBackendFirst) {
+        if IdentificationManager.shared.isSystemIdentifierTrackingEnabled && shouldSyncWithBackendFirst {
             syncCookiesWithBackend()
         } else {
             if hostAppIncludesExpectedUrlScheme && shouldSyncWithSifoInternetApp {
@@ -330,16 +340,16 @@ private extension TSMobileAnalytics {
         }
     }
     
-    private func onBackendSyncError(){
+    private func onBackendSyncError() {
         // fallback to sync with panelist app
-        if self.shouldSyncWithSifoInternetApp {
+        if shouldSyncWithSifoInternetApp {
             syncTokenWithSifoInternetApp(additionals: additionals)
         } else {
-            self.refreshCookies() { self.sendTagWithAppStart() }
+            refreshCookies { self.sendTagWithAppStart() }
         }
     }
-    
-    func updateCookieString(from cookies:[Cookie]) throws {
+
+    func updateCookieString(from cookies: [Cookie]) throws {
         guard let urlEncoded = try cookies.urlEncoded() else {
             Self.logger.log(message: "Unable to update cookies", verbosity: .error)
             return
@@ -354,7 +364,10 @@ private extension TSMobileAnalytics {
     func refreshCookies(completion: @escaping () -> Void) {
         guard let cookieString = Storage.shared.cookieString,
               let cookieDictionaries = JSONManager.parseURLEncodedJSON(cookieString)
-        else { return }
+        else {
+            completion()
+            return
+        }
 
         var cookies = cookieDictionaries.cookies()
         cookies.append(contentsOf: settingsCookies())
@@ -401,29 +414,37 @@ private extension TSMobileAnalytics {
     func setUpKeychainItemWrapper(accessGroup: String) {
         let formattedAccessGroup = Self.formattedAccessGroup(fromAccessGroup: accessGroup)
 
-        keychainItemWrapper = KeychainItemWrapper(identifier: String.userID,
-                                                  accessGroup: formattedAccessGroup)
+        keychainItemWrapper = KeychainItemWrapper(
+            identifier: String.userID,
+            accessGroup: formattedAccessGroup,
+            account: String.userID,
+            service: String.serviceName
+        )
 
-        if let uuidString = keychainUserId, !uuidString.isEmpty {
-            setUpKeychainItems(identifier: uuidString,
-                               accessGroup: formattedAccessGroup)
-            self.userID = uuidString
+        if let keychainUserId, !keychainUserId.isEmpty {
+            userID = keychainUserId
+        } else {
+            let identifier = uuidString()
+            setUpKeychainItems(identifier: identifier)
+            userID = identifier
         }
     }
 
-    func setUpKeychainItems(identifier: String, accessGroup: String) {
-        let uuidData = UUID().uuidString.data(using: .utf8)
-        keychainItemWrapper?.setKeychainItems(
-            accessGroup: accessGroup,
-            securityClass: kSecClassGenericPassword,
-            account: String.userID,
-            service: String.serviceName,
-            data: uuidData as CFData?
-        )
+    func setUpKeychainItems(identifier: String) {
+        guard let uuidData = identifier.data(using: .utf8) else {
+            Self.logger.log(
+                message: "Failed to encode keychain user identifier.",
+                verbosity: .error)
+            return
+        }
+
+        keychainItemWrapper?.setKeychainData(uuidData)
     }
 
     func syncTokenWithSifoInternetApp(additionals: [String: String]) {
-        guard (Storage.shared.nextSyncDate ?? .distantFuture) > .now else { return }
+        if !Self.shouldAttemptSync(nextSyncDate: Storage.shared.nextSyncDate, now: Date()) {
+            return
+        }
 
         var urlString: String = URL.panelistAppString
 
@@ -441,6 +462,7 @@ private extension TSMobileAnalytics {
             urlString.append(Bundle.main.exchangeUrlScheme)
         }
 
+        #if canImport(UIKit)
         guard let url = URL(string: urlString),
               UIApplication.shared.canOpenURL(url)
         else {
@@ -453,6 +475,11 @@ private extension TSMobileAnalytics {
         DispatchQueue.main.async {
             UIApplication.shared.open(url)
         }
+        #else
+        Self.logger.log(
+            message: "Skipping panelist app sync because UIKit is unavailable on this platform.",
+            verbosity: .debug)
+        #endif
     }
 
     static func deviceReference(applicationName: String) -> String? {
@@ -488,8 +515,7 @@ private extension TSMobileAnalytics {
     }
 
     func setNextSyncDate() {
-        let numberOfWeeks = Storage.shared.nextSyncDate == nil ? 2 : 12
-        Storage.shared.nextSyncDate = .now.advancedBy(numberOfWeeks: numberOfWeeks)
+        Storage.shared.nextSyncDate = Self.nextSyncDate(after: Storage.shared.nextSyncDate, now: Date())
     }
 
     func updateSDKVersion() {
@@ -504,6 +530,26 @@ private extension TSMobileAnalytics {
                 "App name: \(applicationName)"
             ],
             verbosity: .info)
+    }
+}
+
+private extension TSMobileAnalytics {
+    var isSifoInternetAppInstalled: Bool {
+        canOpenURL(URL.panelistAppUrl)
+    }
+
+    /// Used to check if the host app can be re-opened from Sifo Internet app,
+    /// once that has been opened.
+    var hostAppIncludesExpectedUrlScheme: Bool {
+        canOpenURL(URL.appUrl)
+    }
+
+    func canOpenURL(_ url: URL) -> Bool {
+        #if canImport(UIKit)
+        return UIApplication.shared.canOpenURL(url)
+        #else
+        return false
+        #endif
     }
 }
 

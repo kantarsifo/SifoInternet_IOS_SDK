@@ -13,3 +13,20 @@ enum APIError: Error {
     case badResponse(Int?)
     case noData
 }
+
+extension APIError: LocalizedError {
+    var errorDescription: String? {
+        switch self {
+        case .unknown:
+            return "Unknown API error."
+        case .badResponse(let statusCode):
+            if let statusCode {
+                return "Unexpected API response status code: \(statusCode)."
+            }
+
+            return "Unexpected API response."
+        case .noData:
+            return "The API response did not include any data."
+        }
+    }
+}
