@@ -13,6 +13,10 @@
 		786810551E1A8E8E00F1E3D5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 786810531E1A8E8E00F1E3D5 /* LaunchScreen.storyboard */; };
 		786810601E1A8E8E00F1E3D5 /* TSMobileAnalyticsIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7868105F1E1A8E8E00F1E3D5 /* TSMobileAnalyticsIntegrationTests.swift */; };
 		7868106C1E1AAA1300F1E3D5 /* NativeExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7868106B1E1AAA1300F1E3D5 /* NativeExampleView.swift */; };
+		A1D1A6010000000000000001 /* SampleAnalyticsConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D1A5010000000000000001 /* SampleAnalyticsConfiguration.swift */; };
+		A1D1A6010000000000000002 /* TestDiagnosticsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D1A5010000000000000002 /* TestDiagnosticsStore.swift */; };
+		A1D1A6010000000000000003 /* WebViewTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D1A5010000000000000003 /* WebViewTestView.swift */; };
+		A1D1A6010000000000000004 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DFAB0D152ACD9CD80014D652 /* WebKit.framework */; };
 		786810731E1AADE300F1E3D5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7868104A1E1A8E8E00F1E3D5 /* AppDelegate.swift */; };
 		786810761E1AADE300F1E3D5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 786810531E1A8E8E00F1E3D5 /* LaunchScreen.storyboard */; };
 		786810801E1AAE4E00F1E3D5 /* HybridExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7868107E1E1AAE4E00F1E3D5 /* HybridExampleView.swift */; };
@@ -45,6 +49,9 @@
 		7868105F1E1A8E8E00F1E3D5 /* TSMobileAnalyticsIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TSMobileAnalyticsIntegrationTests.swift; sourceTree = "<group>"; };
 		786810611E1A8E8E00F1E3D5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7868106B1E1AAA1300F1E3D5 /* NativeExampleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NativeExampleView.swift; sourceTree = "<group>"; };
+		A1D1A5010000000000000001 /* SampleAnalyticsConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleAnalyticsConfiguration.swift; sourceTree = "<group>"; };
+		A1D1A5010000000000000002 /* TestDiagnosticsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestDiagnosticsStore.swift; sourceTree = "<group>"; };
+		A1D1A5010000000000000003 /* WebViewTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewTestView.swift; sourceTree = "<group>"; };
 		7868107C1E1AADE300F1E3D5 /* HybridIntegration.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HybridIntegration.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7868107D1E1AADE400F1E3D5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = TSMobileAnalyticsIntegration/Info.plist; sourceTree = SOURCE_ROOT; };
 		7868107E1E1AAE4E00F1E3D5 /* HybridExampleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HybridExampleView.swift; sourceTree = "<group>"; };
@@ -65,6 +72,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A1D1A6010000000000000004 /* WebKit.framework in Frameworks */,
 				DFAB0D122ACD9B9F0014D652 /* TSMobileAnalytics in Frameworks */,
 				A8CBE253300AA557677D6B0A /* Pods_NativeIntegration.framework in Frameworks */,
 			);
@@ -138,6 +146,9 @@
 			children = (
 				78071EA81E23DE6C008313A1 /* Assets.xcassets */,
 				7868106B1E1AAA1300F1E3D5 /* NativeExampleView.swift */,
+				A1D1A5010000000000000001 /* SampleAnalyticsConfiguration.swift */,
+				A1D1A5010000000000000002 /* TestDiagnosticsStore.swift */,
+				A1D1A5010000000000000003 /* WebViewTestView.swift */,
 			);
 			path = NativeIntegration;
 			sourceTree = "<group>";
@@ -373,6 +384,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A1D1A6010000000000000001 /* SampleAnalyticsConfiguration.swift in Sources */,
+				A1D1A6010000000000000002 /* TestDiagnosticsStore.swift in Sources */,
+				A1D1A6010000000000000003 /* WebViewTestView.swift in Sources */,
 				7868106C1E1AAA1300F1E3D5 /* NativeExampleView.swift in Sources */,
 				7868104B1E1A8E8E00F1E3D5 /* AppDelegate.swift in Sources */,
 			);

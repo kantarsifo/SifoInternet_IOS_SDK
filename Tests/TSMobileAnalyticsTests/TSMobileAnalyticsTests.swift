@@ -78,6 +78,101 @@ final class TSMobileAnalyticsTests: XCTestCase {
         XCTAssertEqual(completionResult?.1 as? SendTagError, .sdkNotInitialized)
     }
 
+    func testSDKVersionIsPublic() {
+        XCTAssertEqual(TSMobileAnalytics.sdkVersion, "6.0.6")
+    }
+
+    func testInitializationEmitsDiagnosticEvent() {
+        let expectation = expectation(description: "initialized")
+
+        TSMobileAnalytics.setDiagnosticEventHandler { event in
+            guard case let .initialized(sdkVersion) = event else { return }
+
+            XCTAssertEqual(sdkVersion, TSMobileAnalytics.sdkVersion)
+            expectation.fulfill()
+        }
+
+        TSMobileAnalytics.initialize(
+            withCPID: String(repeating: "x", count: 32),
+            applicationName: "TestApp",
+            trackingType: .TrackUsersAndPanelists,
+            enableSystemIdentifierTracking: false,
+            keychainAccessGroup: nil
+        )
+
+        wait(for: [expectation], timeout: 1)
+    }
+
+    func testAppStartSkippedEmitsDiagnosticEvent() {
+        let expectation = expectation(description: "app start skipped")
+
+        TSMobileAnalytics.setDiagnosticEventHandler { event in
+            guard event == .appStartSkipped else { return }
+            expectation.fulfill()
+        }
+
+        TSMobileAnalytics.initialize(
+            withCPID: String(repeating: "x", count: 32),
+            applicationName: "TestApp",
+            trackingType: .TrackUsersAndPanelists,
+            enableSystemIdentifierTracking: false,
+            keychainAccessGroup: nil
+        )
+
+        wait(for: [expectation], timeout: 1)
+    }
+
+    func testAutomaticAppStartEmitsAttemptAndSuccessDiagnostics() {
+        let session = MockNetworkSession()
+        session.responseData = Data("{}".utf8)
+        session.response = HTTPURLResponse(
+            url: URL(string: "https://example.com")!,
+            statusCode: 200,
+            httpVersion: nil,
+            headerFields: nil)
+
+        let analytics = makeAnalytics(apiService: APIService(session: session))
+        let attempted = expectation(description: "app start attempted")
+        let completed = expectation(description: "app start succeeded")
+
+        TSMobileAnalytics.setDiagnosticEventHandler { event in
+            switch event {
+            case .appStartAttempted:
+                attempted.fulfill()
+            case let .appStartCompleted(success, errorDescription):
+                XCTAssertTrue(success)
+                XCTAssertNil(errorDescription)
+                completed.fulfill()
+            default:
+                break
+            }
+        }
+
+        analytics.sendTagWithAppStart()
+
+        wait(for: [attempted, completed], timeout: 1)
+    }
+
+    func testAutomaticAppStartEmitsFailureDiagnostic() {
+        let session = MockNetworkSession()
+        session.error = URLError(.notConnectedToInternet)
+
+        let analytics = makeAnalytics(apiService: APIService(session: session))
+        let completed = expectation(description: "app start failed")
+
+        TSMobileAnalytics.setDiagnosticEventHandler { event in
+            guard case let .appStartCompleted(success, errorDescription) = event else { return }
+
+            XCTAssertFalse(success)
+            XCTAssertEqual(errorDescription, URLError(.notConnectedToInternet).localizedDescription)
+            completed.fulfill()
+        }
+
+        analytics.sendTagWithAppStart()
+
+        wait(for: [completed], timeout: 1)
+    }
+
     func testSendTagCompletionFailsWhenPanelistCookieIsMissing() {
         TSMobileAnalytics.initialize(
             withCPID: String(repeating: "x", count: 32),
@@ -215,11 +310,26 @@ final class TSMobileAnalyticsTests: XCTestCase {
     }
 
     private func resetSDKState() {
+        TSMobileAnalytics.setDiagnosticEventHandler(nil)
         TSMobileAnalytics.shared = nil
         Storage.shared.uuidString = nil
         Storage.shared.cookieString = nil
         Storage.shared.sdkVersion = nil
         Storage.shared.nextSyncDate = nil
+    }
+
+    private func makeAnalytics(apiService: APIService) -> TSMobileAnalytics {
+        let analytics = TSMobileAnalytics(
+            cpid: String(repeating: "x", count: 32),
+            applicationName: "TestApp",
+            trackingType: .TrackUsersAndPanelists,
+            isSystemIdentifierTrackingEnabled: false,
+            isWebViewBased: true,
+            keychainAccessGroup: nil,
+            apiService: apiService
+        )
+        TSMobileAnalytics.shared = analytics
+        return analytics
     }
 }
 

@@ -17,10 +17,13 @@ public final class TSMobileAnalytics {
     // TODO: Find a way to automate this.
     /// This needs to be updated when a new release is made.
     /// Swift Package version numbers are grabbed from the tags of the git repository.
-    static let sdkVersion = "6.0.6"
+    /// The version of the SDK linked by the host application.
+    public static let sdkVersion = "6.0.6"
 
     static var shared: TSMobileAnalytics?
     static let logger = ConsoleLogger()
+    private static let diagnosticsQueue = DispatchQueue(label: "se.tns-sifo.mobile-analytics.diagnostics")
+    private static var diagnosticEventHandler: ((TSMobileAnalyticsDiagnosticEvent) -> Void)?
 
     private let jsonDecoder = JSONDecoder()
     private let apiService: APIService
@@ -117,9 +120,9 @@ public final class TSMobileAnalytics {
             setUpUserID()
         }
 
-        handleCookieSync()
-
         logInitalization()
+        Self.emitDiagnosticEvent(.initialized(sdkVersion: Self.sdkVersion))
+        handleCookieSync()
     }
 
     /// Initializes a `static` instance of `TSMobileAnalytics` called `shared`.
@@ -162,6 +165,16 @@ public final class TSMobileAnalytics {
     public static func setLogPrintsActivated(_ isEnabled: Bool, verbosiry: Verbosity = .debug) {
         guard isEnabled else { return }
         Self.logger.verbosity = verbosiry
+    }
+
+    /// Sets an optional handler for privacy-safe SDK lifecycle diagnostics.
+    ///
+    /// The handler is called on the main queue. Set this to `nil` when diagnostics
+    /// are no longer needed.
+    public static func setDiagnosticEventHandler(_ handler: ((TSMobileAnalyticsDiagnosticEvent) -> Void)?) {
+        Self.diagnosticsQueue.sync {
+            Self.diagnosticEventHandler = handler
+        }
     }
 
     public static func addWebView(_ webView: WKWebView) {
@@ -283,7 +296,10 @@ extension TSMobileAnalytics {
 
     func handleCookieSync() {
         guard isOldPanelUserInfoCached || isSifoInternetAppInstalled
-        else { return }
+        else {
+            Self.emitDiagnosticEvent(.appStartSkipped)
+            return
+        }
 
         if IdentificationManager.shared.isSystemIdentifierTrackingEnabled && shouldSyncWithBackendFirst {
             syncCookiesWithBackend()
@@ -395,7 +411,13 @@ extension TSMobileAnalytics {
     }
 
     func sendTagWithAppStart() {
-        Self.sendTag(withCategories: [.appStart])
+        Self.emitDiagnosticEvent(.appStartAttempted)
+        Self.sendTag(withCategories: [.appStart]) { success, error in
+            Self.emitDiagnosticEvent(
+                .appStartCompleted(
+                    success: success,
+                    errorDescription: error?.localizedDescription))
+        }
     }
 
     func setUpUserID() {
@@ -530,6 +552,13 @@ extension TSMobileAnalytics {
                 "App name: \(applicationName)"
             ],
             verbosity: .info)
+    }
+
+    static func emitDiagnosticEvent(_ event: TSMobileAnalyticsDiagnosticEvent) {
+        DispatchQueue.main.async {
+            let handler = Self.diagnosticsQueue.sync { Self.diagnosticEventHandler }
+            handler?(event)
+        }
     }
 }
 

@@ -14,22 +14,29 @@ import TSMobileAnalytics
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    private let diagnostics = TestDiagnosticsStore(isConfigured: SampleAnalyticsConfiguration.isConfigured)
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
+        TSMobileAnalytics.setDiagnosticEventHandler { [weak diagnostics] event in
+            diagnostics?.record(event)
+        }
+
         self.window = UIWindow(frame: UIScreen.main.bounds)
         self.window?.backgroundColor = UIColor.green
-        self.window?.rootViewController = UIHostingController(rootView: ExampleView())
+        self.window?.rootViewController = UIHostingController(rootView: ExampleView(diagnostics: diagnostics))
         self.window?.makeKeyAndVisible()
         
         //Initiate TSMobileAnalytics
         
+        guard SampleAnalyticsConfiguration.isConfigured else { return true }
+
         TSMobileAnalytics.setLogPrintsActivated(true)
-        TSMobileAnalytics.initialize(withCPID: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-                                     applicationName: "Sample app",
+        TSMobileAnalytics.initialize(withCPID: SampleAnalyticsConfiguration.cpid,
+                                     applicationName: SampleAnalyticsConfiguration.applicationName,
                                      trackingType: .TrackUsersAndPanelists, enableSystemIdentifierTracking: false,
                                      isWebViewBased: true,
-                                     keychainAccessGroup: "mo.dyna.TSMobileAnalyticsIntegration")
+                                     keychainAccessGroup: SampleAnalyticsConfiguration.keychainAccessGroup)
         
         return true
     }
@@ -38,4 +45,3 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return TSMobileAnalytics.application(app, open: url, options: options)
     }
 }
-
